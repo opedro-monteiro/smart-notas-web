@@ -30,22 +30,22 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/",
       icon: <LayoutDashboardIcon />,
     },
     {
       title: "Clientes",
-      url: "#",
+      url: "/dashboard/clients",
       icon: <Users2 />,
     },
     {
       title: "Débitos",
-      url: "#",
+      url: "/dashboard/debts",
       icon: <HandCoins />,
     },
     {
       title: "Registros de Cobrança",
-      url: "#",
+      url: "/dashboard/debts-registers",
       icon: <MessageCircleCheckIcon />,
     },
   ],

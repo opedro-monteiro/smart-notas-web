@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { CirclePlusIcon } from "lucide-react";
+import Link from "next/link";
 
 export function NavMain({
   items,
@@ -35,10 +36,12 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
+              <Link href={item.url}>
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
