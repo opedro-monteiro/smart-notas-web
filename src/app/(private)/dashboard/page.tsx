@@ -1,14 +1,13 @@
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function DashboardPage() {
-  const { userId } = await auth();
-
-  console.log(userId);
+  const user = await currentUser();
 
   return (
-    <div className="mx-auto flex flex-col">
-      <h1>Hello, {userId}</h1>
-      <p>Welcome, Dashboard</p>
+    <div className="">
+      <h1 className="text-xl">
+        Bem Vindo, <span className="font-bold">{user?.fullName}</span>
+      </h1>
     </div>
   );
 }
