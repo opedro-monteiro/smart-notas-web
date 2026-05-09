@@ -1,6 +1,12 @@
 "use client";
 
 import * as React from "react";
+import {
+  HandCoins,
+  LayoutDashboardIcon,
+  MessageCircleCheckIcon,
+  Users2,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -12,43 +18,32 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  HandCoins,
-  LayoutDashboardIcon,
-  MessageCircleCheckIcon,
-  Users2,
-} from "lucide-react";
 import LogoTraditional from "./icons/logo-icon";
+import { ROUTES } from "@/constants/routes";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+const navItems = [
+  {
+    title: "Dashboard",
+    url: ROUTES.dashboard,
+    icon: <LayoutDashboardIcon />,
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: <LayoutDashboardIcon />,
-    },
-    {
-      title: "Clientes",
-      url: "/dashboard/clients",
-      icon: <Users2 />,
-    },
-    {
-      title: "Débitos",
-      url: "/dashboard/debts",
-      icon: <HandCoins />,
-    },
-    {
-      title: "Registros de Cobrança",
-      url: "/dashboard/debts-registers",
-      icon: <MessageCircleCheckIcon />,
-    },
-  ],
-};
+  {
+    title: "Clientes",
+    url: ROUTES.clients,
+    icon: <Users2 />,
+  },
+  {
+    title: "Débitos",
+    url: ROUTES.debts,
+    icon: <HandCoins />,
+  },
+  {
+    title: "Registros de Cobrança",
+    url: ROUTES.debtsRegisters,
+    icon: <MessageCircleCheckIcon />,
+  },
+];
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -56,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <a
-              href="/dashboard"
+              href={ROUTES.dashboard}
               aria-label="dashboard"
               className="flex items-center gap-2 px-2 py-2"
             >
@@ -67,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
