@@ -14,6 +14,9 @@ import React from "react";
 const labels: Record<string, string> = {
   dashboard: "Dashboard",
   clients: "Clientes",
+  debts: "Débitos",
+  new: "Novo",
+  edit: "Editar",
   settings: "Configurações",
 };
 

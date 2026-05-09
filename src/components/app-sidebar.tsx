@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  CommandIcon,
   HandCoins,
   LayoutDashboardIcon,
   MessageCircleCheckIcon,
@@ -30,7 +29,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: <LayoutDashboardIcon />,
     },
     {
