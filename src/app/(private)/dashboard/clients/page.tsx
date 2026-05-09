@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GetBreadcrumb } from "@/components/shared/breadcumbs";
 import { DataTable } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,9 @@ export default function ClientsPage() {
           <h1 className="text-xl font-bold">Tela de Clientes</h1>
           <GetBreadcrumb />
         </div>
-        <Button>Cadastrar Cliente</Button>
+        <Link href="/dashboard/clients/new">
+          <Button>Cadastrar Cliente</Button>
+        </Link>
       </section>
       <DataTable columns={columns} data={clientsData} />
     </div>
