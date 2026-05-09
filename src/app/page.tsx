@@ -1,7 +1,6 @@
 import Link from "next/link"
 import {
   MessageSquareText,
-  Phone,
   Mail,
   Smartphone,
   ArrowRight,
@@ -12,6 +11,10 @@ import {
   Zap,
   Clock,
   ShieldCheck,
+  X,
+  RefreshCw,
+  History,
+  Star,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
@@ -30,42 +33,61 @@ type PricingTier = {
   cta: string
   href: string
   highlighted: boolean
+  badge?: string
+  highlight?: string
+  limits?: { whatsapp: string; sms: string; calls?: string; email: string }
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const features = [
+const painPoints = [
+  "Manda cobrança individual no WhatsApp toda semana",
+  "Esquece clientes em atraso e perde dinheiro",
+  "Cobra fora do horário e passa constrangimento",
+  "Não sabe quem pagou e quem está devendo",
+  "Perde horas por mês em cobranças manuais",
+]
+
+const benefits = [
+  {
+    icon: Zap,
+    title: "Cobranças automáticas",
+    text: "Configure uma vez. O sistema cobra por você todos os dias, no horário certo, sem precisar lembrar.",
+  },
   {
     icon: MessageSquareText,
-    label: "WhatsApp & SMS",
-    title: "Mensagens que chegam onde o cliente está",
-    description:
-      "Envie cobranças pelo canal preferido do seu cliente. Taxa de abertura de WhatsApp chega a 98% — muito mais eficaz que e-mail.",
-    accent: "bg-green-500",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    title: "E-mails formais e rastreáveis",
-    description:
-      "Templates profissionais com comprovante de entrega. Ideal para clientes corporativos e registros legais.",
-    accent: "bg-primary",
-  },
-  {
-    icon: Phone,
-    label: "Ligação automática",
-    title: "Voz quando o silêncio não funciona",
-    description:
-      "Ligações automáticas com mensagem de voz personalizada para devedores que ignoram mensagens escritas.",
-    accent: "bg-orange-500",
+    title: "WhatsApp, SMS, e-mail e voz",
+    text: "Alcance seus clientes pelo canal que eles realmente respondem. Tudo automático e rastreável.",
   },
   {
     icon: FileText,
-    label: "Templates",
-    title: "Mensagens personalizadas com variáveis",
-    description:
-      "Use {{nomeCliente}}, {{valor}}, {{dataVencimento}} e mais. Cada mensagem parece escrita à mão.",
-    accent: "bg-violet-500",
+    title: "Mensagens personalizadas",
+    text: "Templates com nome do cliente, valor e data de vencimento. Parece escrito à mão, vai automático.",
+  },
+  {
+    icon: BarChart3,
+    title: "Dashboard em tempo real",
+    text: "Veja quem pagou, quem está em atraso e qual canal performa melhor para cada cliente.",
+  },
+  {
+    icon: History,
+    title: "Histórico completo",
+    text: "Cada cobrança registrada com data, canal e status. Nunca mais perca o controle.",
+  },
+  {
+    icon: RefreshCw,
+    title: "Reenvio automático",
+    text: "Cliente não abriu? O Smart Notas reenvio pelo próximo canal. Você não precisa fazer nada.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Seguro e conforme a LGPD",
+    text: "Dados protegidos com criptografia e processamento conforme a legislação brasileira.",
+  },
+  {
+    icon: Clock,
+    title: "Funciona 24/7",
+    text: "Mesmo quando você está de folga, viajando ou dormindo. As cobranças saem no horário.",
   },
 ]
 
@@ -74,151 +96,124 @@ const steps = [
     number: "01",
     title: "Cadastre seus clientes",
     description:
-      "Importe ou adicione clientes com nome, telefone e e-mail. Leva menos de 2 minutos.",
+      "Adicione clientes com nome, telefone e e-mail. Importação simples, leva menos de 2 minutos.",
   },
   {
     number: "02",
-    title: "Configure os débitos",
+    title: "Configure as cobranças",
     description:
-      "Defina valor, vencimento e os canais preferidos de cada cliente: SMS, WhatsApp, e-mail ou ligação.",
+      "Defina valor, vencimento e os canais preferidos: WhatsApp, SMS, e-mail ou ligação.",
   },
   {
     number: "03",
-    title: "Receba em dia",
+    title: "O Smart Notas envia automaticamente",
     description:
-      "O Smart Notas envia os lembretes automaticamente. Você acompanha tudo pelo dashboard em tempo real.",
+      "Lembretes saem no momento certo, para a pessoa certa, pelo canal certo. Sem intervenção.",
   },
+  {
+    number: "04",
+    title: "Receba mais em dia",
+    description:
+      "Acompanhe pagamentos no dashboard e veja a inadimplência cair mês a mês.",
+  },
+]
+
+const differentials = [
+  { icon: MessageSquareText, text: "Funciona no WhatsApp real" },
+  { icon: Zap, text: "Automação de verdade, não lembretes manuais" },
+  { icon: Clock, text: "Configuração em menos de 5 minutos" },
+  { icon: ShieldCheck, text: "Seguro e LGPD compliant" },
+  { icon: History, text: "Histórico completo de cobranças" },
+  { icon: FileText, text: "Templates inteligentes com variáveis" },
+  { icon: Users, text: "Multicanal por cliente" },
+  { icon: RefreshCw, text: "Funciona mesmo quando você está offline" },
 ]
 
 const tiers: PricingTier[] = [
   {
-    name: "Gratuito",
-    price: "R$ 0",
+    name: "Starter",
+    price: "R$ 27",
     period: "/mês",
-    description: "Para começar a organizar suas cobranças.",
+    description: "Para microempresas que querem parar de cobrar manualmente.",
+    limits: {
+      whatsapp: "50 WhatsApp/mês",
+      sms: "50 SMS/mês",
+      email: "E-mails ilimitados",
+    },
     features: [
-      { text: "Até 10 clientes", included: true },
-      { text: "Cobranças por e-mail", included: true },
-      { text: "Dashboard básico", included: true },
-      { text: "SMS e WhatsApp", included: false },
+      { text: "Até 50 clientes", included: true },
+      { text: "50 WhatsApp + 50 SMS por mês", included: true },
+      { text: "50 E-mails", included: true },
+      { text: "Templates básicos", included: true },
+      { text: "Dashboard simples", included: true },
       { text: "Ligações automáticas", included: false },
       { text: "Templates personalizados", included: false },
+      { text: "Reenvio automático", included: false },
     ],
-    cta: "Começar grátis",
+    cta: "Começar agora",
     href: "/sign-up",
     highlighted: false,
   },
   {
-    name: "Pro",
-    price: "R$ 99",
+    name: "Growth",
+    price: "R$ 87",
     period: "/mês",
-    description: "Para empresas que não toleram inadimplência.",
+    description: "Para empresas que querem recuperar dinheiro de verdade.",
+    badge: "Mais popular",
+    highlight: "1 cliente recuperado já paga o plano.",
+    limits: {
+      whatsapp: "150 WhatsApp/mês",
+      sms: "150 SMS/mês",
+      email: "150 E-mails",
+    },
     features: [
-      { text: "Clientes ilimitados", included: true },
-      { text: "SMS, WhatsApp e e-mail", included: true },
-      { text: "Ligações automáticas", included: true },
-      { text: "Templates com variáveis", included: true },
+      { text: "Até 500 clientes", included: true },
+      { text: "150 WhatsApp + 150 SMS por mês", included: true },
+      { text: "150 E-mails", included: true },
+      { text: "Templates personalizados", included: true },
       { text: "Dashboard avançado", included: true },
+      { text: "Reenvio automático", included: true },
       { text: "Suporte prioritário", included: true },
+      { text: "Ligações automáticas", included: false },
+      { text: "Relatórios de desempenho", included: false },
     ],
-    cta: "Assinar Pro",
+    cta: "Automatizar minhas cobranças",
     href: "/sign-up",
     highlighted: true,
   },
+  {
+    name: "Scale",
+    price: "R$ 299",
+    period: "/mês",
+    description: "Para operações maiores que não toleram inadimplência.",
+    limits: {
+      whatsapp: "1.500 WhatsApp/mês",
+      sms: "1.500 SMS/mês",
+      calls: "500 ligações/mês",
+      email: "E-mails ilimitados",
+    },
+    features: [
+      { text: "Clientes ilimitados", included: true },
+      { text: "2.000 WhatsApp + 1.500 SMS/mês", included: true },
+      { text: "500 ligações automáticas/mês", included: true },
+      { text: "E-mails ilimitados", included: true },
+      { text: "Multiusuários", included: true },
+      { text: "Métricas avançadas", included: true },
+      { text: "IA para sugestões de mensagem (em breve)", included: true },
+      { text: "API (em breve)", included: true },
+      { text: "Atendimento dedicado", included: true },
+    ],
+    cta: "Falar com especialista",
+    href: "/sign-up",
+    highlighted: false,
+  },
 ]
-
-// ─── Features grid ────────────────────────────────────────────────────────────
-
-const openRates = [
-  { label: "Abertura WhatsApp", pct: 96, color: "bg-green-500" },
-  { label: "Abertura SMS", pct: 82, color: "bg-blue-500" },
-  { label: "Abertura E-mail", pct: 43, color: "bg-violet-500" },
-]
-
-function FeaturesGrid() {
-  const MainIcon = features[0].icon
-  return (
-    <>
-      {/* Big feature */}
-      <div className="md:row-span-2 flex flex-col justify-between rounded-2xl border border-border bg-muted/30 p-8">
-        <div>
-          <div
-            className={cn(
-              "mb-6 inline-flex h-10 w-10 items-center justify-center rounded-xl text-white",
-              features[0].accent,
-            )}
-          >
-            <MainIcon className="h-5 w-5" />
-          </div>
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-            {features[0].label}
-          </div>
-          <h3 className="font-heading text-xl font-bold leading-snug md:text-2xl">
-            {features[0].title}
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            {features[0].description}
-          </p>
-        </div>
-
-        <div className="mt-8 space-y-2">
-          {openRates.map((bar) => (
-            <div key={bar.label} className="space-y-1">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{bar.label}</span>
-                <span className="font-semibold">{bar.pct}%</span>
-              </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
-                <div
-                  className={cn("h-full rounded-full", bar.color)}
-                  style={{ width: `${bar.pct}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Smaller features */}
-      {features.slice(1).map((f) => {
-        const Icon = f.icon
-        return (
-          <div
-            key={f.label}
-            className="flex gap-4 rounded-2xl border border-border bg-muted/30 p-6"
-          >
-            <div
-              className={cn(
-                "shrink-0 flex h-9 w-9 items-center justify-center rounded-lg text-white",
-                f.accent,
-              )}
-            >
-              <Icon className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                {f.label}
-              </div>
-              <h3 className="font-heading text-sm font-bold leading-snug">
-                {f.title}
-              </h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                {f.description}
-              </p>
-            </div>
-          </div>
-        )
-      })}
-    </>
-  )
-}
 
 // ─── Notification mockup ───────────────────────────────────────────────────────
 
 function NotificationMockup() {
   return (
     <div className="relative w-full max-w-sm mx-auto select-none" aria-hidden>
-      {/* Phone frame */}
       <div className="relative rounded-3xl border-2 border-foreground/10 bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden">
         {/* Status bar */}
         <div className="flex items-center justify-between px-6 py-3 bg-zinc-50 dark:bg-zinc-800 border-b border-border">
@@ -230,7 +225,6 @@ function NotificationMockup() {
           </div>
         </div>
 
-        {/* Message list */}
         <div className="p-4 space-y-3 bg-white dark:bg-zinc-900">
           {/* WhatsApp */}
           <div className="flex items-start gap-3 p-3 rounded-xl bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900/50">
@@ -297,7 +291,6 @@ function NotificationMockup() {
         </div>
       </div>
 
-      {/* Floating badge */}
       <div className="absolute -top-3 -right-3 flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg">
         <Zap className="h-3 w-3" />
         Automático
@@ -323,10 +316,10 @@ export default function HomePage() {
 
           <nav className="hidden items-center gap-6 md:flex">
             <Link
-              href="#funcionalidades"
+              href="#problema"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              Funcionalidades
+              Por que usar
             </Link>
             <Link
               href="#como-funciona"
@@ -345,9 +338,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <Link
               href="/sign-in"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "sm" }),
-              )}
+              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
             >
               Entrar
             </Link>
@@ -365,7 +356,6 @@ export default function HomePage() {
       <main className="flex-1">
         {/* ── Hero ───────────────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden border-b border-border">
-          {/* Subtle grid background */}
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.03]"
             style={{
@@ -381,14 +371,14 @@ export default function HomePage() {
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground">
                   <span className="flex h-1.5 w-1.5 rounded-full bg-green-500" />
-                  Cobranças automáticas em produção
+                  Teste grátis por 7 dias — sem cartão de crédito
                 </div>
 
                 <div className="space-y-4">
                   <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-                    Pare de perder dinheiro com faturas{" "}
+                    Pare de perder dinheiro com clientes{" "}
                     <span className="relative">
-                      não pagas
+                      inadimplentes
                       <span
                         className="absolute bottom-1 left-0 h-1 w-full rounded-full bg-primary opacity-40"
                         aria-hidden
@@ -397,9 +387,8 @@ export default function HomePage() {
                     .
                   </h1>
                   <p className="max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
-                    Smart Notas envia lembretes automáticos por SMS, WhatsApp,
-                    e-mail e ligação. Você configura uma vez — o sistema cobra
-                    por você.
+                    O Smart Notas automatiza cobranças por WhatsApp, SMS, e-mail
+                    e ligação para que sua empresa receba mais sem desgaste.
                   </p>
                 </div>
 
@@ -408,7 +397,7 @@ export default function HomePage() {
                     href="/sign-up"
                     className={cn(buttonVariants({ size: "lg" }), "gap-2")}
                   >
-                    Começar gratuitamente
+                    Começar teste grátis
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
@@ -424,20 +413,44 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <Check className="h-3.5 w-3.5 text-green-500" />
-                    Sem cartão de crédito
+                    Teste grátis por 7 dias
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Check className="h-3.5 w-3.5 text-green-500" />
-                    Configuração em 5 minutos
+                    Configuração em menos de 5 minutos
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Check className="h-3.5 w-3.5 text-green-500" />
                     Cancele quando quiser
                   </span>
                 </div>
+
+                {/* Social proof */}
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="flex -space-x-2">
+                    {["JM", "AS", "RF", "PL"].map((initials) => (
+                      <div
+                        key={initials}
+                        className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-primary text-[10px] font-bold text-primary-foreground"
+                      >
+                        {initials}
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Centenas de empresas já automatizaram suas cobranças
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              {/* Right — notification mockup */}
+              {/* Right */}
               <div className="flex justify-center md:justify-end">
                 <NotificationMockup />
               </div>
@@ -453,7 +466,7 @@ export default function HomePage() {
                 { value: "94%", label: "Taxa de entrega" },
                 { value: "3×", label: "Mais pagamentos em dia" },
                 { value: "< 5min", label: "Para configurar" },
-                { value: "4 canais", label: "SMS, WhatsApp, E-mail, Voz" },
+                { value: "4 canais", label: "WhatsApp, SMS, E-mail, Voz" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="font-heading text-2xl font-bold text-foreground md:text-3xl">
@@ -468,56 +481,137 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Features ───────────────────────────────────────────────────────── */}
-        <section
-          id="funcionalidades"
-          className="mx-auto max-w-6xl px-6 py-20 md:py-28"
-        >
-          <div className="mb-14 max-w-xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
-              Funcionalidades
-            </p>
-            <h2 className="font-heading text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-              Tudo que você precisa para receber em dia
-            </h2>
-          </div>
+        {/* ── Pain section ───────────────────────────────────────────────────── */}
+        <section id="problema" className="border-b border-border">
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <div className="grid gap-14 md:grid-cols-2 md:gap-20 items-center">
+              {/* Left — problems */}
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-destructive">
+                  O problema
+                </p>
+                <h2 className="font-heading text-3xl font-bold leading-tight tracking-tight mb-8 md:text-4xl">
+                  Isso acontece na sua empresa?
+                </h2>
+                <ul className="space-y-4">
+                  {painPoints.map((point) => (
+                    <li key={point} className="flex items-start gap-3">
+                      <div className="shrink-0 mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive/10">
+                        <X className="h-3 w-3 text-destructive" />
+                      </div>
+                      <span className="text-sm leading-relaxed text-muted-foreground">
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <FeaturesGrid />
+              {/* Right — solution */}
+              <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8">
+                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+                  <Zap className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <h3 className="font-heading text-xl font-bold mb-3">
+                  O Smart Notas resolve isso automaticamente.
+                </h3>
+                <p className="text-sm leading-relaxed text-muted-foreground mb-6">
+                  Configure uma vez e o sistema envia cobranças profissionais pelo
+                  canal certo, no horário certo, para cada cliente. Sem
+                  constrangimento, sem esquecimento.
+                </p>
+                <ul className="space-y-2">
+                  {[
+                    "Cobranças automáticas no horário comercial",
+                    "Mensagens personalizadas para cada cliente",
+                    "Acompanhamento em tempo real de quem pagou",
+                    "Zero intervenção manual no dia a dia",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2.5 text-sm">
+                      <Check className="h-4 w-4 shrink-0 text-primary" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/sign-up"
+                  className={cn(buttonVariants({ size: "sm" }), "mt-8 gap-2")}
+                >
+                  Resolver agora
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Benefits ───────────────────────────────────────────────────────── */}
+        <section className="border-b border-border bg-muted/20">
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <div className="mb-14 max-w-xl">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
+                Benefícios
+              </p>
+              <h2 className="font-heading text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+                Tudo para recuperar dinheiro sem desgaste
+              </h2>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {benefits.map((b) => {
+                const BenefitIcon = b.icon
+                return (
+                  <div
+                    key={b.title}
+                    className="flex flex-col gap-3 rounded-2xl border border-border bg-background p-6"
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                      <BenefitIcon className="h-4 w-4 text-primary" />
+                    </div>
+                    <h3 className="font-heading text-sm font-bold">{b.title}</h3>
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {b.text}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </section>
 
         {/* ── How it works ───────────────────────────────────────────────────── */}
-        <section
-          id="como-funciona"
-          className="border-y border-border bg-muted/30"
-        >
+        <section id="como-funciona" className="border-b border-border">
           <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
             <div className="mb-14 text-center">
               <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
                 Como funciona
               </p>
               <h2 className="font-heading text-3xl font-bold tracking-tight md:text-4xl">
-                Simples de configurar. Poderoso na prática.
+                Automatize suas cobranças em menos de 5 minutos.
               </h2>
+              <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+                Configure uma vez. O Smart Notas faz o trabalho todos os dias.
+              </p>
             </div>
 
-            <div className="relative grid gap-8 md:grid-cols-3">
-              {/* Connector line — desktop only */}
+            <div className="relative grid gap-8 md:grid-cols-4">
               <div
-                className="absolute top-8 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] hidden h-px border-t border-dashed border-border md:block"
+                className="absolute top-8 left-[calc(12.5%+1rem)] right-[calc(12.5%+1rem)] hidden h-px border-t border-dashed border-border md:block"
                 aria-hidden
               />
 
               {steps.map((step) => (
-                <div key={step.number} className="relative flex flex-col items-start md:items-center md:text-center">
+                <div
+                  key={step.number}
+                  className="relative flex flex-col items-start md:items-center md:text-center"
+                >
                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-primary/20 bg-background font-heading text-xl font-bold text-primary">
                     {step.number}
                   </div>
-                  <h3 className="mb-2 font-heading text-base font-bold">
+                  <h3 className="mb-2 font-heading text-sm font-bold">
                     {step.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                  <p className="text-xs leading-relaxed text-muted-foreground">
                     {step.description}
                   </p>
                 </div>
@@ -526,48 +620,36 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Additional value props ─────────────────────────────────────────── */}
-        <section className="mx-auto max-w-6xl px-6 py-16">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: Clock,
-                title: "Pontual e confiável",
-                text: "Os lembretes saem no horário certo, todos os dias — mesmo quando você está de folga.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Seguro e conforme a LGPD",
-                text: "Dados protegidos com criptografia. Processamento conforme a legislação brasileira.",
-              },
-              {
-                icon: BarChart3,
-                title: "Dashboard em tempo real",
-                text: "Veja quem pagou, quem está em atraso e quais canais funcionam melhor para cada cliente.",
-              },
-            ].map((item) => {
-              const ValueIcon = item.icon
-              return (
-              <div
-                key={item.title}
-                className="flex flex-col gap-3 rounded-2xl border border-border p-6"
-              >
-                <ValueIcon className="h-5 w-5 text-primary" />
-                <h3 className="font-heading text-sm font-bold">{item.title}</h3>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {item.text}
-                </p>
-              </div>
-              )
-            })}
+        {/* ── Differentials ──────────────────────────────────────────────────── */}
+        <section className="border-b border-border bg-muted/20">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <div className="mb-10 text-center">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">
+                Diferenciais
+              </p>
+              <h2 className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
+                O jeito profissional de cobrar clientes.
+              </h2>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {differentials.map((d) => {
+                const DiffIcon = d.icon
+                return (
+                  <div
+                    key={d.text}
+                    className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3"
+                  >
+                    <DiffIcon className="h-4 w-4 shrink-0 text-primary" />
+                    <span className="text-xs font-medium">{d.text}</span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </section>
 
         {/* ── Pricing ────────────────────────────────────────────────────────── */}
-        <section
-          id="precos"
-          className="border-t border-border"
-        >
+        <section id="precos" className="border-b border-border">
           <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
             <div className="mb-14 text-center">
               <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
@@ -577,22 +659,30 @@ export default function HomePage() {
                 Simples e sem surpresas
               </h2>
               <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-                Comece gratuitamente e faça upgrade quando precisar de mais
-                alcance.
+                Comece gratuitamente por 7 dias. Sem cartão de crédito.
               </p>
             </div>
 
-            <div className="mx-auto grid max-w-3xl gap-4 md:grid-cols-2">
+            <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
               {tiers.map((tier) => (
                 <div
                   key={tier.name}
                   className={cn(
-                    "flex flex-col rounded-2xl p-8",
+                    "relative flex flex-col rounded-2xl p-8",
                     tier.highlighted
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-xl scale-[1.02]"
                       : "border border-border bg-background",
                   )}
                 >
+                  {tier.badge && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-yellow-900">
+                        <Star className="h-3 w-3" />
+                        {tier.badge}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="mb-6">
                     <p
                       className={cn(
@@ -658,6 +748,19 @@ export default function HomePage() {
                     ))}
                   </ul>
 
+                  {tier.highlight && (
+                    <p
+                      className={cn(
+                        "mb-4 text-center text-xs font-semibold",
+                        tier.highlighted
+                          ? "text-yellow-300"
+                          : "text-primary",
+                      )}
+                    >
+                      ✦ {tier.highlight}
+                    </p>
+                  )}
+
                   <Link
                     href={tier.href}
                     className={cn(
@@ -672,28 +775,41 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+
+            <p className="mt-8 text-center text-xs text-muted-foreground">
+              Todos os planos incluem 7 dias de teste grátis. Cancele a qualquer momento.
+            </p>
           </div>
         </section>
 
-        {/* ── CTA band ───────────────────────────────────────────────────────── */}
-        <section className="border-t border-border bg-primary">
-          <div className="mx-auto max-w-6xl px-6 py-16 text-center">
-            <h2 className="font-heading text-2xl font-bold text-primary-foreground md:text-3xl">
-              Pronto para receber o que é seu?
+        {/* ── Final CTA ──────────────────────────────────────────────────────── */}
+        <section className="bg-primary">
+          <div className="mx-auto max-w-6xl px-6 py-20 text-center">
+            <h2 className="font-heading text-2xl font-bold text-primary-foreground md:text-4xl">
+              Pare de cobrar manualmente hoje mesmo.
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-sm text-primary-foreground/70">
-              Configure em 5 minutos. Sem cartão de crédito. Cancele quando
-              quiser.
+            <p className="mx-auto mt-4 max-w-md text-sm text-primary-foreground/70">
+              Configure o Smart Notas em menos de 5 minutos e deixe as cobranças
+              acontecerem automaticamente.
             </p>
-            <Link
-              href="/sign-up"
-              className={cn(
-                "mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90",
-              )}
-            >
-              Criar conta gratuita
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90"
+              >
+                Começar teste grátis
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="#como-funciona"
+                className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground/80 transition-colors hover:bg-primary-foreground/10"
+              >
+                Ver demonstração
+              </Link>
+            </div>
+            <p className="mt-5 text-xs text-primary-foreground/50">
+              Sem cartão de crédito · Cancele quando quiser · Suporte incluso
+            </p>
           </div>
         </section>
       </main>
@@ -702,7 +818,6 @@ export default function HomePage() {
       <footer className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-12">
           <div className="grid gap-10 md:grid-cols-4">
-            {/* Brand */}
             <div className="md:col-span-1">
               <Link href="/" className="flex items-center gap-2.5">
                 <LogoTraditional width={28} height={28} />
@@ -711,19 +826,40 @@ export default function HomePage() {
                 </span>
               </Link>
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                Cobranças automáticas que realmente funcionam.
+                Cobranças automáticas para empresas que querem receber sem
+                desgaste.
               </p>
             </div>
 
-            {/* Links */}
             <div>
               <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-foreground">
                 Produto
               </p>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li><Link href="#funcionalidades" className="hover:text-foreground transition-colors">Funcionalidades</Link></li>
-                <li><Link href="#precos" className="hover:text-foreground transition-colors">Preços</Link></li>
-                <li><Link href="#como-funciona" className="hover:text-foreground transition-colors">Como funciona</Link></li>
+                <li>
+                  <Link
+                    href="#problema"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Por que usar
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#precos"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Preços
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#como-funciona"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Como funciona
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -732,9 +868,30 @@ export default function HomePage() {
                 Conta
               </p>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li><Link href="/sign-in" className="hover:text-foreground transition-colors">Entrar</Link></li>
-                <li><Link href="/sign-up" className="hover:text-foreground transition-colors">Criar conta</Link></li>
-                <li><Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
+                <li>
+                  <Link
+                    href="/sign-in"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Entrar
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/sign-up"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Criar conta
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -743,16 +900,23 @@ export default function HomePage() {
                 Legal
               </p>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li><span className="cursor-default">Termos de uso</span></li>
-                <li><span className="cursor-default">Privacidade</span></li>
-                <li><span className="cursor-default">LGPD</span></li>
+                <li>
+                  <span className="cursor-default">Termos de uso</span>
+                </li>
+                <li>
+                  <span className="cursor-default">Privacidade</span>
+                </li>
+                <li>
+                  <span className="cursor-default">LGPD</span>
+                </li>
               </ul>
             </div>
           </div>
 
           <div className="mt-10 border-t border-border pt-6 flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between">
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Smart Notas. Todos os direitos reservados.
+              © {new Date().getFullYear()} Smart Notas. Todos os direitos
+              reservados.
             </p>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Users className="h-3 w-3" />

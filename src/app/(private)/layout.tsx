@@ -1,7 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { ClerkProvider } from "@clerk/nextjs";
 import { QueryProvider } from "@/components/query-provider";
 import { Toaster } from "sonner";
 
@@ -11,7 +10,6 @@ export default function PrivateLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
       <QueryProvider>
         <SidebarProvider
           style={
@@ -35,6 +33,5 @@ export default function PrivateLayout({
           <Toaster position="top-right" richColors />
         </SidebarProvider>
       </QueryProvider>
-    </ClerkProvider>
   );
 }
