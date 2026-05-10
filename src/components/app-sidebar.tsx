@@ -56,7 +56,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="flex items-center gap-2 px-2 py-2"
             >
               <LogoTraditional height={48} width={48} />
-              <span className="text-base font-semibold">Smart Notas</span>
+              <span className="text-base font-semibold">Lembreto</span>
             </a>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -82,7 +82,7 @@ function StatusCard({ sub }: { sub: NonNullable<ReturnType<typeof useSubscriptio
           Trial gratuito — {trialDays} dia{trialDays !== 1 ? "s" : ""} restante{trialDays !== 1 ? "s" : ""}
         </p>
         <p className="mt-0.5 text-xs text-yellow-700 dark:text-yellow-500">
-          Assine um plano para continuar usando o Smart Notas após o trial.
+          Assine um plano para continuar usando o Lembreto após o trial.
         </p>
       </div>
     );
