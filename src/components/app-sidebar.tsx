@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import {
   HandCoins,
   LayoutDashboardIcon,
@@ -18,8 +19,8 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import LogoTraditional from "./icons/logo-icon";
 import { ROUTES } from "@/constants/routes";
+import logo from "./icons/logo.png";
 
 const navItems = [
   {
@@ -55,7 +56,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               aria-label="dashboard"
               className="flex items-center gap-2 px-2 py-2"
             >
-              <LogoTraditional height={48} width={48} />
+              <Image
+                src={logo}
+                alt="Logo oficial Lembreto"
+                width={64}
+                height={64}
+                className="h-16 w-16 rounded-xl object-cover"
+              />
               <span className="text-base font-semibold">Lembreto</span>
             </a>
           </SidebarMenuItem>
