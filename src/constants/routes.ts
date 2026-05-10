@@ -17,4 +17,7 @@ export const ROUTES = {
   // Debts
   debts: "/dashboard/debts",
   debtsRegisters: "/dashboard/debts-registers",
+
+  // Billing
+  billing: "/dashboard/billing",
 } as const;

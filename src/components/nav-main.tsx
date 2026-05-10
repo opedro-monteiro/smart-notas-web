@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/sidebar";
 import { CirclePlusIcon } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
+import { useSubscription } from "@/features/subscription/hooks/use-subscription";
+import { isAtLimit } from "@/core/plans";
+import { isSubscriptionActive } from "@/features/subscription/schema";
 
 export function NavMain({
   items,
@@ -22,6 +25,14 @@ export function NavMain({
   }[];
 }>) {
   const pathname = usePathname();
+  const { data: sub } = useSubscription();
+
+  const clientCount = 0; // Optimistic — backend enforces hard limit
+  const clientLimitReached =
+    sub && isSubscriptionActive(sub)
+      ? isAtLimit(sub.planTier, "clients", clientCount)
+      : false;
+  const canAddClient = isSubscriptionActive(sub ?? null) && !clientLimitReached;
 
   return (
     <SidebarGroup>
@@ -29,9 +40,9 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
-              tooltip="Cadastrar Cliente"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-              render={<Link href={ROUTES.clientsNew} />}
+              tooltip={canAddClient ? "Cadastrar Cliente" : "Limite de clientes atingido"}
+              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+              render={canAddClient ? <Link href={ROUTES.clientsNew} /> : <button disabled />}
             >
               <CirclePlusIcon />
               <span>Cadastrar Cliente</span>

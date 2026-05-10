@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "abacate-pay": {
+      "command": "bun",
+      "args": [
+        "/Users/pedromonteiro/Documents/Smart Notas/abacatepay-mcp/src/index.ts"
+      ],
+      "env": {
+        "ABACATE_PAY_API_KEY": "abc_dev_maeTNG3eXCWebWrqcZXMDEAh"
+      }
+    }
+  }
+}
