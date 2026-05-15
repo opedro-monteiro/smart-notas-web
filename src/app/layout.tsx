@@ -30,6 +30,9 @@ export const metadata: Metadata = {
   description:
     "Cobre clientes e amigos por WhatsApp, SMS ou e-mail de forma automática. Lembretes de cobrança personalizados para pessoas físicas, autônomos e empresas.",
   applicationName: "Lembreto",
+  appleWebApp: {
+    title: "Lembreto",
+  },
   openGraph: {
     title: "Lembreto — Cobranças automáticas sem constrangimento",
     description:
