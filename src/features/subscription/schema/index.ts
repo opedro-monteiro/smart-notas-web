@@ -8,8 +8,19 @@ export const SubscriptionStatusSchema = z.enum([
 ]);
 export type SubscriptionStatus = z.infer<typeof SubscriptionStatusSchema>;
 
-export const PlanTierSchema = z.enum(["STARTER", "GROWTH", "SCALE"]);
+export const PlanTierSchema = z.enum(["PERSONAL", "COLLECTOR", "BUSINESS", "AGENCY"]);
 export type PlanTier = z.infer<typeof PlanTierSchema>;
+
+const PLAN_TIER_LABELS: Record<PlanTier, string> = {
+  PERSONAL: "Pessoal",
+  COLLECTOR: "Cobrador",
+  BUSINESS: "Negócio",
+  AGENCY: "Agência",
+};
+
+export function getPlanTierLabel(tier: PlanTier): string {
+  return PLAN_TIER_LABELS[tier];
+}
 
 export const MessageUsageSchema = z.object({
   channel: z.enum(["SMS", "WHATSAPP", "EMAIL", "CALL"]),

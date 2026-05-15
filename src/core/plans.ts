@@ -1,11 +1,13 @@
-export type PlanTier = "STARTER" | "GROWTH" | "SCALE";
+export type PlanTier = "PERSONAL" | "COLLECTOR" | "BUSINESS" | "AGENCY";
 
 export type PlanLimits = {
-  clients: number | null;
-  whatsapp: number | null;
-  sms: number | null;
-  email: number | null;
-  calls: number | null;
+  /** cobranças p/ terceiros por mês (null = ilimitado) */
+  thirdPartyMessages: number | null;
+  whatsapp: boolean;
+  sms: boolean;
+  email: boolean;
+  push: boolean;
+  overagePerMessage: number | null; // centavos, null = sem excedente
 };
 
 export type PlanConfig = {
@@ -21,80 +23,98 @@ export type PlanConfig = {
 };
 
 export const PLANS: Record<PlanTier, PlanConfig> = {
-  STARTER: {
-    tier: "STARTER",
-    name: "Starter",
-    description: "Para microempresas que querem parar de cobrar manualmente.",
-    priceMonthly: 2700,
+  PERSONAL: {
+    tier: "PERSONAL",
+    name: "Pessoal",
+    description: "Grátis para sempre.",
+    priceMonthly: 0,
     highlighted: false,
     limits: {
-      clients: 50,
-      whatsapp: 50,
-      sms: 50,
-      email: null,
-      calls: 0,
+      thirdPartyMessages: 5,
+      whatsapp: false,
+      sms: false,
+      email: true,
+      push: true,
+      overagePerMessage: null,
     },
     features: [
-      { text: "Até 50 clientes", included: true },
-      { text: "50 WhatsApp + 50 SMS por mês", included: true },
-      { text: "E-mails ilimitados", included: true },
-      { text: "Templates básicos", included: true },
-      { text: "Dashboard simples", included: true },
-      { text: "Ligações automáticas", included: false },
-      { text: "Templates personalizados", included: false },
-      { text: "Reenvio automático", included: false },
+      { text: "Lembretes próprios ilimitados", included: true },
+      { text: "5 cobranças p/ terceiros/mês (e-mail)", included: true },
+      { text: "Push + E-mail", included: true },
+      { text: "Dashboard básico", included: true },
+      { text: "WhatsApp", included: false },
+      { text: "SMS", included: false },
     ],
   },
-  GROWTH: {
-    tier: "GROWTH",
-    name: "Growth",
-    description: "Para empresas que querem recuperar dinheiro de verdade.",
-    priceMonthly: 8700,
+  COLLECTOR: {
+    tier: "COLLECTOR",
+    name: "Cobrador",
+    description: "Para autônomos e freelancers.",
+    priceMonthly: 2900,
     badge: "Mais popular",
     highlight: "1 cliente recuperado já paga o plano.",
     highlighted: true,
     limits: {
-      clients: 500,
-      whatsapp: 150,
-      sms: 150,
-      email: 150,
-      calls: 0,
+      thirdPartyMessages: 50,
+      whatsapp: true,
+      sms: false,
+      email: true,
+      push: true,
+      overagePerMessage: null,
     },
     features: [
-      { text: "Até 500 clientes", included: true },
-      { text: "150 WhatsApp + 150 SMS por mês", included: true },
-      { text: "150 E-mails", included: true },
+      { text: "Lembretes próprios ilimitados", included: true },
+      { text: "50 cobranças p/ terceiros/mês", included: true },
+      { text: "WhatsApp + E-mail", included: true },
       { text: "Templates personalizados", included: true },
-      { text: "Dashboard avançado", included: true },
+      { text: "Dashboard completo", included: true },
       { text: "Reenvio automático", included: true },
-      { text: "Suporte prioritário", included: true },
-      { text: "Ligações automáticas", included: false },
-      { text: "Relatórios de desempenho", included: false },
+      { text: "SMS", included: false },
     ],
   },
-  SCALE: {
-    tier: "SCALE",
-    name: "Scale",
-    description: "Para operações maiores que não toleram inadimplência.",
-    priceMonthly: 29900,
+  BUSINESS: {
+    tier: "BUSINESS",
+    name: "Negócio",
+    description: "Para pequenas empresas.",
+    priceMonthly: 7900,
     highlighted: false,
     limits: {
-      clients: null,
-      whatsapp: 2000,
-      sms: 1500,
-      email: null,
-      calls: 500,
+      thirdPartyMessages: 300,
+      whatsapp: true,
+      sms: true,
+      email: true,
+      push: true,
+      overagePerMessage: null,
     },
     features: [
-      { text: "Clientes ilimitados", included: true },
-      { text: "2.000 WhatsApp + 1.500 SMS/mês", included: true },
-      { text: "500 ligações automáticas/mês", included: true },
-      { text: "E-mails ilimitados", included: true },
-      { text: "Multiusuários", included: true },
-      { text: "Métricas avançadas", included: true },
-      { text: "IA para sugestões de mensagem (em breve)", included: true },
-      { text: "API (em breve)", included: true },
-      { text: "Atendimento dedicado", included: true },
+      { text: "Lembretes próprios ilimitados", included: true },
+      { text: "300 cobranças p/ terceiros/mês", included: true },
+      { text: "WhatsApp + SMS + E-mail", included: true },
+      { text: "Relatórios avançados", included: true },
+      { text: "Suporte prioritário", included: true },
+    ],
+  },
+  AGENCY: {
+    tier: "AGENCY",
+    name: "Agência",
+    description: "Para quem gerencia múltiplos clientes.",
+    priceMonthly: 19900,
+    highlighted: false,
+    limits: {
+      thirdPartyMessages: 1000,
+      whatsapp: true,
+      sms: true,
+      email: true,
+      push: true,
+      overagePerMessage: 20,
+    },
+    features: [
+      { text: "Lembretes próprios ilimitados", included: true },
+      { text: "1.000 cobranças p/ terceiros/mês", included: true },
+      { text: "WhatsApp + SMS + E-mail", included: true },
+      { text: "Múltiplos usuários", included: true },
+      { text: "Gerente dedicado", included: true },
+      { text: "SLA garantido", included: true },
     ],
   },
 };
@@ -106,22 +126,17 @@ export function formatPlanPrice(cents: number): string {
   }).format(cents / 100);
 }
 
-export function isAtLimit(
-  tier: PlanTier,
-  resource: keyof PlanLimits,
-  current: number,
-): boolean {
-  const limit = PLANS[tier].limits[resource];
+export function isAtThirdPartyLimit(tier: PlanTier, current: number): boolean {
+  const limit = PLANS[tier].limits.thirdPartyMessages;
   if (limit === null) return false;
   return current >= limit;
 }
 
-export function getRemainingQuota(
+export function getRemainingThirdPartyQuota(
   tier: PlanTier,
-  resource: keyof PlanLimits,
   current: number,
 ): number | null {
-  const limit = PLANS[tier].limits[resource];
+  const limit = PLANS[tier].limits.thirdPartyMessages;
   if (limit === null) return null;
   return Math.max(0, limit - current);
 }
